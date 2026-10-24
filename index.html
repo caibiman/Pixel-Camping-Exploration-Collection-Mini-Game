@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>像素露营探索收集 · PIXEL CAMP</title>
+  <!-- TailwindCSS（CDN）。界面装饰性样式集中在 css/styles.css，离线时布局仍可用 -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <header class="site-head">
+    <h1 class="site-title">PIXEL CAMP</h1>
+    <p class="site-sub">像素森林营地 · 探索 / 拾取 / 收集卡牌</p>
+  </header>
+
+  <!-- 游戏舞台：Canvas 固定 480x320 逻辑分辨率，整体按整数倍放大 -->
+  <div id="game-frame">
+    <canvas id="game" width="480" height="320"></canvas>
+
+    <!-- 游戏内 HUD -->
+    <div id="hud">
+      <div class="hud-left">
+        <div class="hud-chip"><span id="hud-phase">白天</span> · 第 <span id="hud-day">1</span> 天</div>
+        <div class="hud-chip">图鉴 <span id="hud-collected">0</span> / <span id="hud-total">0</span></div>
+      </div>
+      <div class="hud-right">
+        <button id="btn-sound" class="pixel-btn small" title="音效开关（M）">音效 开</button>
+        <button id="btn-backpack" class="pixel-btn small" title="背包图鉴（B）">图鉴 B</button>
+      </div>
+    </div>
+
+    <div id="hint-bar">WASD / 方向键 移动 · 走近柴禾、水壶自动拾取 · B 图鉴 · M 音效</div>
+  </div>
+
+  <!-- 抽卡翻牌弹窗 -->
+  <div id="modal-reveal" class="modal" aria-hidden="true">
+    <div class="reveal-wrap">
+      <div class="reveal-head" id="reveal-head">拾取成功 · 抽卡！</div>
+      <div class="flip-stage">
+        <div class="flip-inner" id="flip-inner">
+          <div class="flip-face flip-back"><span class="back-q">?</span></div>
+          <div class="flip-face flip-front" id="flip-front">
+            <div class="card-rarity" id="reveal-rarity">普通</div>
+            <img id="reveal-img" alt="抽到的卡牌" />
+            <div class="card-name" id="reveal-name">--</div>
+            <div class="card-cat" id="reveal-category">装备</div>
+            <p class="card-desc" id="reveal-desc">--</p>
+            <div class="new-badge" id="reveal-new">NEW!</div>
+          </div>
+        </div>
+      </div>
+      <button class="pixel-btn" id="btn-reveal-continue">继续探索</button>
+    </div>
+  </div>
+
+  <!-- 背包图鉴 -->
+  <div id="modal-backpack" class="modal" aria-hidden="true">
+    <div class="panel backpack-panel">
+      <div class="panel-head">
+        <div class="panel-title">露营图鉴 <span id="bp-count">0 / 0</span></div>
+        <button class="pixel-btn small" id="btn-bp-close">关闭 ESC</button>
+      </div>
+      <div class="card-grid" id="bp-grid"></div>
+      <div class="panel-foot">点击卡牌查看详情 · 未收集的卡牌显示为剪影</div>
+    </div>
+  </div>
+
+  <!-- 卡牌详情 -->
+  <div id="modal-detail" class="modal" aria-hidden="true">
+    <div class="panel detail-panel">
+      <div class="panel-head">
+        <div class="panel-title" id="detail-name">卡牌详情</div>
+        <button class="pixel-btn small" id="btn-detail-close">关闭</button>
+      </div>
+      <div class="detail-body">
+        <div class="detail-art"><img id="detail-img" alt="卡牌图案" /></div>
+        <div class="detail-info">
+          <div class="detail-row"><span class="label">稀有度</span><span id="detail-rarity">--</span></div>
+          <div class="detail-row"><span class="label">类别</span><span id="detail-category">--</span></div>
+          <div class="detail-row"><span class="label">编号</span><span id="detail-id">--</span></div>
+          <p class="detail-desc" id="detail-desc">--</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer class="site-foot">
+    <span>卡牌元数据接口预留：camp_card 表（id / card_name / rarity / description / pixel_img_src / category）</span>
+  </footer>
+
+  <!-- 模块脚本按依赖顺序加载（普通脚本，可直接双击 index.html 运行） -->
+  <script src="js/config.js"></script>
+  <script src="js/cardData.js"></script>
+  <script src="js/cardArt.js"></script>
+  <script src="js/cardRepository.js"></script>
+  <script src="js/audio.js"></script>
+  <script src="js/world.js"></script>
+  <script src="js/player.js"></script>
+  <script src="js/lighting.js"></script>
+  <script src="js/loot.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>

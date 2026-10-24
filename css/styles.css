@@ -1,0 +1,511 @@
+/* =========================================================
+   PIXEL CAMP · 复古 GameBoy 像素风样式
+   配色：墨绿草地 / 棕树干 / 暖橙篝火 / 深蓝夜空
+   ========================================================= */
+
+:root {
+  --ink: #0a1410;
+  --paper: #e8e6d9;
+  --grass: #2e5d34;
+  --grass-dark: #1f4a2b;
+  --grass-light: #3d7f46;
+  --trunk: #6b4226;
+  --fire: #f59e0b;
+  --night: #0b1430;
+  --panel: #12261b;
+  --panel-line: #356b45;
+  --chip-bg: rgba(8, 16, 12, 0.82);
+  --rarity-common: #a9c0ab;
+  --rarity-rare: #6fb3ff;
+  --rarity-legendary: #ffc75a;
+}
+
+* { box-sizing: border-box; }
+
+html { height: 100%; }
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  padding: 10px 12px 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  color: var(--paper);
+  background:
+    radial-gradient(circle at 50% 0%, #16283a 0%, #0a1220 45%, #060b14 100%);
+  font-family: "Press Start 2P", "Zpix", "Courier New", monospace;
+  -webkit-font-smoothing: none;
+  text-rendering: optimizeSpeed;
+}
+
+/* ---------------- 标题区 ---------------- */
+.site-head { text-align: center; }
+
+.site-title {
+  margin: 0;
+  font-size: 15px;
+  letter-spacing: 3px;
+  color: #f3e9c9;
+  text-shadow: 3px 3px 0 #0a1410, 0 0 16px rgba(245, 158, 11, 0.35);
+}
+
+.site-sub {
+  margin: 4px 0 0;
+  font-size: 7px;
+  letter-spacing: 2px;
+  color: #7f9b88;
+}
+
+/* ---------------- 游戏舞台 ---------------- */
+#game-frame {
+  position: relative;
+  padding: 5px;
+  background: #0a1410;
+  border: 3px solid var(--panel-line);
+  box-shadow:
+    0 0 0 3px #050a07,
+    6px 6px 0 rgba(0, 0, 0, 0.55),
+    0 0 46px rgba(61, 127, 70, 0.18),
+    inset 0 0 30px rgba(0, 0, 0, 0.8);
+  line-height: 0;
+  max-width: 100%;
+}
+
+#game {
+  display: block;
+  image-rendering: pixelated;
+  image-rendering: -moz-crisp-edges;
+  image-rendering: crisp-edges;
+  background: var(--night);
+  width: 480px;
+  height: 320px;
+}
+
+/* ---------------- HUD ---------------- */
+#hud {
+  position: absolute;
+  top: 11px;
+  left: 11px;
+  right: 11px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+  pointer-events: none;
+  line-height: 1.5;
+}
+
+.hud-left { display: flex; flex-wrap: wrap; gap: 6px; }
+.hud-right { display: flex; gap: 6px; pointer-events: auto; }
+
+.hud-chip {
+  padding: 6px 9px;
+  font-size: 10px;
+  letter-spacing: 0.5px;
+  color: #d8e6cf;
+  background: var(--chip-bg);
+  border: 2px solid #2e5d34;
+  box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.6);
+}
+
+/* ---------------- 像素按钮 ---------------- */
+.pixel-btn {
+  font-family: inherit;
+  font-size: 9px;
+  letter-spacing: 1px;
+  padding: 7px 10px;
+  color: #eaf3df;
+  background: var(--grass);
+  border: 2px solid #0a1410;
+  border-radius: 0;
+  cursor: pointer;
+  box-shadow:
+    inset 0 2px 0 #4d8a5c,
+    inset 0 -2px 0 #1b3a22,
+    3px 3px 0 rgba(0, 0, 0, 0.55);
+  transition: filter 0.1s linear;
+}
+
+.pixel-btn:hover { filter: brightness(1.18); }
+
+.pixel-btn:active {
+  transform: translate(2px, 2px);
+  box-shadow:
+    inset 0 2px 0 #1b3a22,
+    1px 1px 0 rgba(0, 0, 0, 0.5);
+}
+
+.pixel-btn.small { font-size: 8px; padding: 6px 8px; }
+
+.pixel-btn.off {
+  background: #2a3630;
+  color: #9aada0;
+  box-shadow:
+    inset 0 2px 0 #4b5a51,
+    inset 0 -2px 0 #17211b,
+    3px 3px 0 rgba(0, 0, 0, 0.55);
+}
+
+/* ---------------- 底部提示条 ---------------- */
+#hint-bar {
+  position: absolute;
+  left: 50%;
+  bottom: 10px;
+  transform: translateX(-50%);
+  padding: 6px 12px;
+  font-size: 9px;
+  letter-spacing: 0.5px;
+  color: #cfe0c8;
+  white-space: nowrap;
+  max-width: calc(100% - 20px);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  background: rgba(8, 16, 12, 0.76);
+  border: 2px solid #2e5d34;
+  pointer-events: none;
+}
+
+/* ---------------- 弹窗通用 ---------------- */
+.modal {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  background: rgba(3, 7, 12, 0.85);
+}
+
+.modal.open { display: flex; }
+
+.panel {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: min(92vw, 520px);
+  max-height: 88vh;
+  padding: 14px;
+  background: var(--panel);
+  border: 3px solid var(--panel-line);
+  box-shadow:
+    0 0 0 3px #0a1410,
+    8px 8px 0 rgba(0, 0, 0, 0.5);
+}
+
+.panel-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding-bottom: 8px;
+  border-bottom: 2px solid #24402d;
+}
+
+.panel-title {
+  font-size: 10px;
+  line-height: 1.6;
+  color: #f3e9c9;
+  letter-spacing: 1px;
+}
+
+.panel-title span { color: var(--fire); }
+
+.panel-foot {
+  padding-top: 6px;
+  font-size: 7px;
+  line-height: 1.6;
+  color: #7f9b88;
+  border-top: 2px solid #24402d;
+}
+
+/* ---------------- 图鉴网格 ---------------- */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
+  overflow-y: auto;
+  padding: 4px 4px 6px;
+  max-height: 58vh;
+  scrollbar-width: thin;
+  scrollbar-color: var(--panel-line) #0a1410;
+}
+
+.card-grid::-webkit-scrollbar { width: 8px; }
+.card-grid::-webkit-scrollbar-track { background: #0a1410; }
+.card-grid::-webkit-scrollbar-thumb { background: var(--panel-line); }
+
+.card-slot {
+  position: relative;
+  aspect-ratio: 3 / 4;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  padding: 5px 3px;
+  background: #0d1a14;
+  border: 2px solid #24402d;
+  cursor: pointer;
+  transition: transform 0.08s linear;
+}
+
+.card-slot img {
+  width: 66%;
+  height: auto;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+}
+
+.card-slot .slot-name {
+  font-size: 6px;
+  line-height: 1.5;
+  text-align: center;
+  color: #cfe0c8;
+  word-break: break-all;
+}
+
+.card-slot:hover {
+  transform: translateY(-2px);
+  border-color: #4d8a5c;
+}
+
+.card-slot.locked img {
+  filter: brightness(0) saturate(0);
+  opacity: 0.55;
+}
+
+.card-slot.locked .slot-name { color: #5f7a68; }
+
+.slot-q {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  color: #4f6d5b;
+  text-shadow: 2px 2px 0 #000;
+  pointer-events: none;
+}
+
+/* 稀有度描边 */
+.r-common { border-color: #3c5a45; }
+.r-rare { border-color: #3b6fa8; box-shadow: inset 0 0 10px rgba(111, 179, 255, 0.18); }
+.r-legendary { border-color: #a37f2e; box-shadow: inset 0 0 12px rgba(255, 199, 90, 0.25); }
+
+.rarity-common { color: var(--rarity-common); }
+.rarity-rare { color: var(--rarity-rare); }
+.rarity-legendary { color: var(--rarity-legendary); }
+
+/* ---------------- 抽卡翻牌弹窗 ---------------- */
+.reveal-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  padding: 16px 18px;
+  background: rgba(10, 20, 16, 0.96);
+  border: 3px solid var(--panel-line);
+  box-shadow:
+    0 0 0 3px #050a07,
+    0 0 40px rgba(245, 158, 11, 0.22),
+    8px 8px 0 rgba(0, 0, 0, 0.5);
+}
+
+.reveal-head {
+  font-size: 9px;
+  letter-spacing: 1px;
+  color: #ffd98a;
+  text-shadow: 2px 2px 0 #0a1410;
+}
+
+.flip-stage {
+  width: 208px;
+  height: 272px;
+  perspective: 900px;
+}
+
+.flip-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  transform: rotateY(0deg);
+}
+
+.flip-inner.flipping {
+  animation: flipReveal 0.95s steps(10, end) forwards;
+}
+
+@keyframes flipReveal {
+  from { transform: rotateY(0deg); }
+  to { transform: rotateY(180deg); }
+}
+
+.flip-face {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 10px;
+  background: #0b1811;
+  border: 3px solid #356b45;
+  backface-visibility: hidden;
+  box-shadow: inset 0 0 18px rgba(0, 0, 0, 0.7);
+  line-height: 1.5;
+}
+
+.flip-back {
+  background:
+    repeating-linear-gradient(45deg, #0d1f16 0 6px, #132b1e 6px 12px);
+}
+
+.back-q {
+  font-size: 64px;
+  color: #2f5a41;
+  text-shadow: 4px 4px 0 #050a07;
+}
+
+.flip-front {
+  transform: rotateY(180deg);
+  --card-accent: var(--rarity-common);
+  border-color: var(--card-accent);
+  box-shadow:
+    inset 0 0 22px rgba(0, 0, 0, 0.7),
+    0 0 16px rgba(255, 255, 255, 0.08);
+}
+
+#reveal-img {
+  width: 96px;
+  height: 96px;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+}
+
+.card-rarity {
+  font-size: 8px;
+  letter-spacing: 2px;
+  padding: 3px 8px;
+  border: 2px solid currentColor;
+}
+
+.card-name {
+  font-size: 10px;
+  letter-spacing: 1px;
+  color: #f3e9c9;
+  text-align: center;
+}
+
+.card-cat {
+  font-size: 7px;
+  color: #8fb6a0;
+  letter-spacing: 1px;
+}
+
+.card-desc {
+  margin: 0;
+  font-size: 7px;
+  line-height: 1.8;
+  color: #b9cdbd;
+  text-align: center;
+}
+
+.new-badge {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  padding: 3px 5px;
+  font-size: 7px;
+  color: #2a1a06;
+  background: var(--fire);
+  border: 2px solid #0a1410;
+  display: none;
+}
+
+.new-badge.show { display: block; animation: badgeBlink 0.7s steps(2, end) infinite; }
+
+@keyframes badgeBlink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.45; }
+}
+
+/* ---------------- 卡牌详情 ---------------- */
+.detail-panel { width: min(92vw, 460px); }
+
+.detail-body {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+}
+
+.detail-art {
+  flex: 0 0 auto;
+  padding: 6px;
+  background: #0b1811;
+  border: 2px solid #24402d;
+}
+
+.detail-art img {
+  display: block;
+  width: 128px;
+  height: 128px;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+}
+
+.detail-art img.locked { filter: brightness(0) saturate(0); opacity: 0.55; }
+
+.detail-info {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 8px;
+  line-height: 1.8;
+}
+
+.detail-row { display: flex; justify-content: space-between; gap: 8px; }
+.detail-row .label { color: #7f9b88; }
+
+.detail-desc {
+  margin: 4px 0 0;
+  padding-top: 8px;
+  font-size: 7px;
+  line-height: 1.9;
+  color: #cfe0c8;
+  border-top: 2px solid #24402d;
+}
+
+/* ---------------- 页脚 ---------------- */
+.site-foot {
+  font-size: 6px;
+  letter-spacing: 1px;
+  color: #4d6b58;
+  text-align: center;
+}
+
+/* ---------------- 响应式 ---------------- */
+/* 视口较矮时压缩标题与页脚，把空间让给游戏画面 */
+@media (max-height: 720px) {
+  body { gap: 6px; padding: 6px 10px; }
+  .site-sub { display: none; }
+  .site-foot { display: none; }
+  .site-title { font-size: 12px; }
+}
+
+@media (max-width: 540px) {
+  .site-title { font-size: 12px; letter-spacing: 2px; }
+  .site-sub { font-size: 7px; }
+  .hud-chip { font-size: 8px; padding: 4px 6px; }
+  .pixel-btn.small { font-size: 7px; padding: 5px 6px; }
+  .card-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .detail-body { flex-direction: column; align-items: center; }
+  #hint-bar { font-size: 7px; padding: 4px 8px; }
+}
